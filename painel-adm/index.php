@@ -4,9 +4,20 @@ require_once("../conexao.php");
 require_once("verificar.php");
 //echo $_SESSION['nome_usuario'];
 
+$id_usuario = $_SESSION['id_usuario'];
+
+// RECUPERAR DADOS DO USUÁRIO
+$query = $pdo->query("SELECT * FROM usuarios where id = '$id_usuario'");
+$res = $query->fetchAll(PDO::FETCH_ASSOC);
+$nome_usuario = $res[0]['nome'];
+$email_usuario = $res[0]['email'];
+$senha_usuario = $res[0]['senha'];
+$nivel_usuario = $res[0]['nivel'];
+
 include("header.php");
 
 ?>
+<body>
 
 <nav class="navbar navbar-expand-lg w3-dark-gray">
   <div class="container-fluid">
@@ -43,7 +54,7 @@ include("header.php");
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle  w3-text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <?php echo @$_SESSION['nome_usuario'] ?>
+                <?php echo $nome_usuario ?>
               </a>
               <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Dados do Perfil</a></li>
@@ -69,31 +80,33 @@ include("header.php");
     <button type="button" class="btn-close w3-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
   </div>
   <div class="offcanvas-body">
-    <form action="autenticar.php" method="POST">
+    <form action="autenticar.php" method="POST" id="form-perfil">
 
 
       <div class="w3-container">
         <div class="mb-3">
           <label for="exampleFormControlInput1" class="form-label">Nome</label>
-          <input type="text" class="form-control" style="text-transform:uppercase;" name="nome">
+          <input type="text" class="form-control inputTextUpper" name="nome" value="<?php echo $nome_usuario ?>">
         </div>
 
         <div class="mb-3">
           <label for="exampleFormControlInput1" class="form-label">Email</label>
-          <input type="email" class="form-control" name="email">
+          <input type="email" class="form-control inputTextLower" name="email" value="<?php echo $email_usuario ?>">
         </div>
 
         <div class="mb-3">
           <label for="exampleFormControlInput1" class="form-label">Senha</label>
-          <input type="text" class="form-control" name="senha">
+          <input type="text" class="form-control" name="senha" value="<?php echo $senha_usuario ?>">
         </div>
 
 
-        <footer class="w3-container row">
+        <footer class="row justify-content-between">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="offcanvas" aria-label="Close" id="btn-fechar-perfil">Fechar</button>
           <button type="submit" class="btn btn-dark mb-3">Salvar</button>
         </footer>
       </div>
 
+      <small><div id="mensagem-perfil" align="center"></div></small>
     </form>
   </div>
 </div>
@@ -103,3 +116,40 @@ include("header.php");
 include("footer.php");
 
 ?>
+
+<!-- AJAX PARA INSERIR OU EDITAR DADOS -->
+<SCRipt type="text/javascript">
+  $('#form-perfil').submit(function(){
+    event.preventDefault();
+    var formData = new FormData(this);
+
+    $.ajax({
+      url: "editar-perfil.php",
+      type: 'POST',
+      data: formData,
+
+      success: function (mensagem) {
+        $('#mensagem-perfil').removeClass()
+        if (mensagem.trim() == "Salvo com sucesso!") {
+          //$(#nome).val('');
+          //$(#cpf).val('');
+          $('#btn-fechar-perfil').click();
+          window.location = "index.php?pagina="+pag;
+
+        } else {
+          $('#mensagem-perfil').addClass('text-danger')
+        }
+
+        $('#mensagem-perfil').text(mensagem)
+      },
+      cache: false,
+      contentType: false,
+      processData:false
+    });
+
+  })
+</SCRipt>
+
+
+</body>
+</html>
