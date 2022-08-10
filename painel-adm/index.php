@@ -86,19 +86,20 @@ include("header.php");
       <div class="w3-container">
         <div class="mb-3">
           <label for="exampleFormControlInput1" class="form-label">Nome</label>
-          <input type="text" class="form-control inputTextUpper" name="nome" value="<?php echo $nome_usuario ?>">
+          <input type="text" class="form-control inputTextUpper" name="nome-usuario" value="<?php echo $nome_usuario ?>">
         </div>
 
         <div class="mb-3">
           <label for="exampleFormControlInput1" class="form-label">Email</label>
-          <input type="email" class="form-control inputTextLower" name="email" value="<?php echo $email_usuario ?>">
+          <input type="email" class="form-control inputTextLower" name="email-usuario" value="<?php echo $email_usuario ?>">
         </div>
 
         <div class="mb-3">
           <label for="exampleFormControlInput1" class="form-label">Senha</label>
-          <input type="text" class="form-control" name="senha" value="<?php echo $senha_usuario ?>">
+          <input type="text" class="form-control" name="senha-usuario" value="<?php echo $senha_usuario ?>">
         </div>
 
+        <input type="hidden" class="form-control" name="id-usuario" value="<?php echo $id_usuario ?>">
 
         <footer class="row justify-content-between">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="offcanvas" aria-label="Close" id="btn-fechar-perfil">Fechar</button>
@@ -134,7 +135,7 @@ include("footer.php");
           //$(#nome).val('');
           //$(#cpf).val('');
           $('#btn-fechar-perfil').click();
-          window.location = "index.php?pagina="+pag;
+          window.location = "index.php";
 
         } else {
           $('#mensagem-perfil').addClass('text-danger')
