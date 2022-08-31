@@ -14,4 +14,5 @@ $query->bindValue(":email", "$email");
 $query->bindValue(":senha", "$senha");
 $query->execute();
 
+
 echo 'Salvo com sucesso!';
